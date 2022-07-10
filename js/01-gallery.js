@@ -25,27 +25,28 @@ galleryEl.insertAdjacentHTML('beforeend', createMarkupGalleryItem(galleryItems))
 
 
 
+let modalGallery;
+
 // Открытие модального окна по клику
 galleryEl.addEventListener('click', onModalGalary)
 
 function onModalGalary(e) { 
     e.preventDefault();
 
-    if (e.target.nodeName !== 'IMG') { 
-        return;
+    if (e.target.nodeName === 'IMG') { 
+        modalGallery = basicLightbox.create(`<img src="${e.target.dataset.source}">`);
+        modalGallery.show(() => window.addEventListener('keydown', closeModalGallery));
+       
     }
-    
-    const gallerySourceImg = e.target.dataset.source;
-
-    const modalGallery = basicLightbox.create(`
-    <img src="${gallerySourceImg}">
-`)
-    modalGallery.show(() => window.addEventListener('keydown', onModalGalleryClose))
-
-    function onModalGalleryClose(e) { 
-        if (e.key === 'Escape') { 
-           modalGallery.close(() => window.removeEventListener('keydown', onModalGalleryClose)) 
-        }
-    }
-
+    return; 
 }
+
+// Закрытие модального окна по клику
+function closeModalGallery(e) { 
+    if (e.key === 'Escape') {  
+        modalGallery.close();
+        window.removeEventListener('keydown', closeModalGallery);
+    }
+    return;
+}
+
