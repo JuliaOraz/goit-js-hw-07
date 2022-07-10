@@ -1,11 +1,11 @@
 import { galleryItems } from './gallery-items.js';
-// Change code below this line
+// // Change code below this line
 
 
 const galleryEl = document.querySelector('.gallery')
 
 // Создание и рендер разметки по массиву данных
-function createGalleryItem(galleryItems) { 
+function createMarkupGalleryItem(galleryItems) { 
     return galleryItems.map(({ preview: src, original: source, description: alt }) => {
         return `<div class="gallery__item">
             <a class="gallery__link" href="${source}">
@@ -21,65 +21,31 @@ function createGalleryItem(galleryItems) {
     }).join('');
 }
 
-galleryEl.insertAdjacentHTML('beforeend', createGalleryItem(galleryItems));
+galleryEl.insertAdjacentHTML('beforeend', createMarkupGalleryItem(galleryItems));
 
 
 
 // Открытие модального окна по клику
-galleryEl.addEventListener('click', onModalClick)
+galleryEl.addEventListener('click', onModalGalary)
 
-function onModalClick(e) { 
+function onModalGalary(e) { 
     e.preventDefault();
 
-    if (e.target.nodeName !== "IMG") {
+    if (e.target.nodeName !== 'IMG') { 
         return;
     }
-
-    modalImageGallery(e.target.dataset.source);
-  
-}
-
-// Модальное окно
-function modalImageGallery(imgSource) {
     
+    const gallerySourceImg = e.target.dataset.source;
+
     const modalGallery = basicLightbox.create(`
-        <img src="${imgSource}">`
-   
-    )
-    openModalImageGallery(modalGallery);
+    <img src="${gallerySourceImg}">
+`)
+    modalGallery.show(() => window.addEventListener('keydown', onModalGalleryClose))
+
+    function onModalGalleryClose(e) { 
+        if (e.key === 'Escape') { 
+           modalGallery.close(() => window.removeEventListener('keydown', onModalGalleryClose)) 
+        }
+    }
+
 }
-
-//Закрытие модального окна
-// function onCloseEsc(e) { 
-    
-//     if (e.code === "Escape") {
-//         console.log(e) 
-//         closeModalImageGallery();
-        
-//     }
-// }
-
-// Открытие модального окна
-function openModalImageGallery(modalGallery) { 
-    // window.addEventListener('keydown', onCloseEsc)
-    modalGallery.show();
-}
-
-// Закрытие модального окна
-// function closeModalImageGallery() { 
-//     // window.removeEventListener('keydown', onCloseEsc, {once: true})
-//     // console.log(document.body);
-//     // modalGallery.close();
-//     const instance = basicLightbox.create(
-//         document.querySelector('.basicLightbox--img'),
-//         {
-// 		onClose: (instance) => instance.close
-// 	})
-
-// }
-
-
-
-
-
-
