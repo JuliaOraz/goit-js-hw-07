@@ -30,22 +30,26 @@ let modalGallery;
 // Открытие модального окна по клику
 galleryEl.addEventListener('click', onModalGalary)
 
+
 function onModalGalary(e) { 
     e.preventDefault();
 
     if (e.target.nodeName === 'IMG') { 
-        modalGallery = basicLightbox.create(`<img src="${e.target.dataset.source}">`);
-        modalGallery.show(() => window.addEventListener('keydown', closeModalGallery));
-       
+        modalGallery = basicLightbox.create(`<img src="${e.target.dataset.source}">`,
+        {
+            onShow: () => window.addEventListener('keydown', closeModalGallery),
+            onClose: () => window.removeEventListener('keydown', closeModalGallery)
+        });
+       modalGallery.show();
     }
-    return; 
+    
+    return;
 }
 
 // Закрытие модального окна по клику
 function closeModalGallery(e) { 
     if (e.key === 'Escape') {  
         modalGallery.close();
-        window.removeEventListener('keydown', closeModalGallery);
     }
     return;
 }
